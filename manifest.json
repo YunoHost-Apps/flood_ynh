@@ -1,22 +1,22 @@
 {
-    "name": "YunoHost example app",
-    "id": "ynhexample",
+    "name": "Flood",
+    "id": "floodynh",
     "packaging_format": 1,
     "description": {
-        "en": "Example package for YunoHost application.",
-        "fr": "Exemple de package d’application pour YunoHost."
+        "en": "Client torrent.",
+        "fr": "Torrent client."
     },
-    "url": "https://example.com",
+    "url": "https://github.com/TakerMc/flood_ynh",
     "license": "free",
     "maintainer": {
-        "name": "John doe",
-        "email": "john.doe@example.com",
-        "url": "http://example.com"
+        "name": "Taker",
+        "email": "me@taker.fr",
+        "url": "https://taker.fr"
     },
     "requirements": {
         "yunohost": ">> 2.5.6"
     },
-    "multi_instance": true,
+    "multi_instance": false,
     "services": [
         "nginx",
         "php5-fpm",
@@ -28,8 +28,8 @@
                 "name": "domain",
                 "type": "domain",
                 "ask": {
-                    "en": "Choose a domain name for ynhexample",
-                    "fr": "Choisissez un nom de domaine pour ynhexample"
+                    "en": "Choose a domain name for flood",
+                    "fr": "Choisissez un nom de domaine pour flood"
                 },
                 "example": "example.com"
             },
@@ -37,39 +37,12 @@
                 "name": "path",
                 "type": "path",
                 "ask": {
-                    "en": "Choose a path for ynhexample",
-                    "fr": "Choisissez un chemin pour ynhexample"
+                    "en": "Choose a path for flood",
+                    "fr": "Choisissez un chemin pour flood"
                 },
-                "example": "/example",
-                "default": "/example"
+                "example": "/flood",
+                "default": "/flood"
             },
-            {
-                "name": "admin",
-                "type": "user",
-                "ask": {
-                    "en": "Choose an admin user",
-                    "fr": "Choisissez l’administrateur"
-                },
-                "example": "johndoe"
-            },
-            {
-                "name": "is_public",
-                "type": "boolean",
-                "ask": {
-                    "en": "Is it a public application?",
-                    "fr": "Est-ce une application publique ?"
-                },
-                "default": true
-            },
-            {
-                "name": "language",
-                "ask": {
-                    "en": "Choose the application language",
-                    "fr": "Choisissez la langue de l'application"
-                },
-                "choices": ["fr", "en"],
-                "default": "fr"
-            }
         ]
     }
 }
