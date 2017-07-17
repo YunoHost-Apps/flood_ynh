@@ -43,6 +43,16 @@
                 "example": "/flood",
                 "default": "/flood"
             },
+            {
+                "name": "data_dir",
+                "type": "path",
+                "ask": {
+                    "en": "Choose a folder to store the downloads",
+                    "fr": "Choisissez un dossier pour sauver les telechargements"
+                },
+                "example": "/mnt/disk1/torrents",
+                "default": "/home/rtorrent"
+            },
         ]
     }
 }

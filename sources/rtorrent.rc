@@ -1,0 +1,18 @@
+scgi_port = 127.0.0.1:5000
+encoding_list = UTF-8
+port_range = 45069-45069
+port_random = no
+check_hash = no
+directory = DATA_DIR/downloads
+session = DATA_DIR/.session
+encryption = allow_incoming, try_outgoing, enable_retry
+schedule = watch_directory,1,1,"load_start=DATA_DIR/watch/*.torrent"
+schedule = untied_directory,5,5,"stop_untied=DATA_DIR/watch/*.torrent"
+use_udp_trackers = yes
+dht = off
+peer_exchange = no
+min_peers = 40
+max_peers = 100
+min_peers_seed = 10
+max_peers_seed = 50
+max_uploads = 15

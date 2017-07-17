@@ -1,202 +1,114 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
+# Retrieve arguments
+domain=$1
+path=$2
+data_dir=$3
+current_dir=${PWD}
+debian_version=$(lsb_release -c -s)
 
-source _common.sh
-source /usr/share/yunohost/helpers
+# Check domain/path availability
+sudo yunohost app checkurl $domain$path -a flood
+if [[ ! $? -eq 0 ]]; then
+  echo "Error: domain/path not available"
+  exit 1
+fi
 
-#=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
+# Install de dependencies
+sudo apt-get update
+apt install build-essential subversion autoconf g++ gcc curl comerr-dev pkg-config cfv libtool libssl-dev libncurses5-dev ncurses-term libsigc++-2.0-dev libcppunit-dev libcurl3 libcurl4-openssl-dev
+cd /tmp
+wget http://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2015.6.1_all.deb
+sudo dpkg -i deb-multimedia-keyring_2015.6.1_all.deb
+  
+# Build xmlrpc
+cd /tmp
+sudo svn checkout http://svn.code.sf.net/p/xmlrpc-c/code/stable xmlrpc-c
+cd xmlrpc-c/
+sudo ./configure
+sudo make
+sudo make install
 
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+# Build libtorrent
+cd /tmp
+sudo git clone https://github.com/rakshasa/libtorrent.git
+cd libtorrent
+sudo git checkout 0.13.6
+sudo ./autogen.sh
+sudo ./configure
+sudo make
+sudo make install
 
-#=================================================
-# RETRIEVE ARGUMENTS FROM THE MANIFEST
-#=================================================
+# Build rtorrent
+cd /tmp
+sudo git clone https://github.com/rakshasa/rtorrent.git
+cd rtorrent
+sudo git checkout 0.9.6
+sudo ./autogen.sh
+sudo ./configure --with-xmlrpc-c
+sudo make
+sudo make install
 
-domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH
-admin=$YNH_APP_ARG_ADMIN
-is_public=$YNH_APP_ARG_IS_PUBLIC
-language=$YNH_APP_ARG_LANGUAGE
+sudo ldconfig
 
-# This is a multi-instance app, meaning it can be installed several times independently
-# The id of the app as stated in the manifest is available as $YNH_APP_ID
-# The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
-# The app instance name is available as $YNH_APP_INSTANCE_NAME
-#    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
-#    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
-#    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
-# The app instance name is probably what you are interested the most, since this is
-# guaranteed to be unique. This is a good unique identifier to define installation path,
-# db names, ...
-app=$YNH_APP_INSTANCE_NAME
+# Configure nginx
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/flood.conf
 
-#=================================================
-# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
-#=================================================
+# Create data dir
+sudo mkdir $data_dir
+sudo mkdir $data_dir/watch
+sudo mkdir $data_dir/downloads
+sudo mkdir $data_dir/.session
 
-# Normalize the url path syntax
-path_url=$(ynh_normalize_url_path $path_url)
+# Create rtorrent user
+sudo useradd -p -m flood
 
-# Check web path availability
-ynh_webpath_available $domain $path_url
-# Register (book) web path
-ynh_webpath_register $app $domain $path_url
+# Add rtorrent config
+sudo sed -i "s@DATA_DIR@$data_dir@g" ../sources/rtorrent.rc
+sudo cp ../sources/rtorrent.rc /home/flood/.rtorrent.rc
+sudo chown -R flood:www-data /home/flood/.rtorrent.rc
 
-final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die "This path already contains a folder"
+sudo chown -R flood:www-data $data_dir
+sudo chmod 755 $data_dir
 
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
 
-ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app path $path_url
-ynh_app_setting_set $app admin $admin
-ynh_app_setting_set $app is_public $is_public
-ynh_app_setting_set $app language $language
+# Check port availability
+sudo yunohost app checkport 45069
+if [[ ! $? -eq 0 ]]; then
+  exit 1
+fi
 
-#=================================================
-# STANDARD MODIFICATIONS
-#=================================================
-# FIND AND OPEN A PORT
-#=================================================
+# Open port in firewall
+sudo yunohost firewall allow TCP 45069 > /dev/null 2>&1
 
-# Find a free port
-port=$(ynh_find_port 8095)
-# Open this port
-sudo yunohost firewall allow --no-upnp TCP $port 2>&1
-ynh_app_setting_set $app port $port
+# Install nodejs for flood
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+sudo apt-get install -y nodejs
 
-#=================================================
-# INSTALL DEPENDENCIES
-#=================================================
+# Clone flood
+cd /home/flood
+git clone https://github.com/jfurrow/flood.git
+cp
 
-ynh_install_app_dependencies deb1 deb2
+# Launch flood on boot
+sudo cp ../sources/flood.service /etc/systemd/system/flood.service
+systemctl daemon-reload
+systemctl enable flood.service
 
-#=================================================
-# CREATE A MYSQL DATABASE
-#=================================================
-# If your app uses a MySQL database, you can use these lines to bootstrap
-# a database, an associated user and save the password in app settings
+# Launch rtorrent on boot
+sudo cp ../sources/rtorrent.service /etc/systemd/system/rtorrent.service
+systemctl daemon-reload
+systemctl enable rtorrent.service
 
-db_name=$(ynh_sanitize_dbid $app)
-ynh_app_setting_set $app db_name $db_name
-ynh_mysql_setup_db $db_name $db_name
-
-#=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
-#=================================================
-
-ynh_app_setting_set $app final_path $final_path
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source "$final_path"
-
-#=================================================
-# NGINX CONFIGURATION
-#=================================================
-
-# Create a dedicated nginx config
-ynh_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-
-# Create a system user
-ynh_system_user_create $app
-
-#=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-
-# Create a dedicated php-fpm config
-ynh_fpm_config
-
-#=================================================
-# SPECIFIC SETUP
-#=================================================
-# ...
-#=================================================
-
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-
-# Create a dedicated systemd config
-ynh_systemd_config
-
-#=================================================
-# SETUP APPLICATION WITH CURL
-#=================================================
-
-# Set right permissions for curl install
-sudo chown -R $app: $final_path
-
-# Set the app as temporarily public for curl call
-ynh_app_setting_set $app unprotected_uris "/"
-# Reload SSOwat config
+# Start rtorrent and flood
+sudo service flood start
+sudo service rtorrent start
 sudo yunohost app ssowatconf
+sudo service nginx reload
 
-# Reload Nginx
-sudo systemctl reload nginx
+# Save config
+sudo yunohost app setting flood data_dir -v $data_dir
+sudo yunohost app setting flood path -v $path
 
-# Installation with curl
-ynh_local_curl "/INSTALL_PATH" "key1=value1" "key2=value2" "key3=value3"
-
-#=================================================
-# STORE THE CHECKSUM OF THE CONFIG FILE
-#=================================================
-
-# Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$final_path/CONFIG_FILE"
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions to app files
-sudo chown -R root: $final_path
-
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-
-# Use logrotate to manage application logfile(s)
-ynh_use_logrotate
-
-#=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
-#=================================================
-
-sudo yunohost service add NAME_INIT.D --log "/var/log/FILE.log"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-
-if [ $is_public -eq 0 ]
-then	# Remove the public access
-	ynh_app_setting_delete $app skipped_uris
-fi
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set $app unprotected_uris "/"
-fi
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-
-sudo systemctl reload nginx
+# Register the service on yunohost
+sudo yunohost service add rtorrent
