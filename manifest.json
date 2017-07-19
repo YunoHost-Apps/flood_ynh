@@ -52,7 +52,7 @@
                 },
                 "example": "/mnt/disk1/torrents",
                 "default": "/home/rtorrent"
-            },
+            }
         ]
     }
 }
