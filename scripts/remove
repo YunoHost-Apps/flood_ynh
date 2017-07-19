@@ -1,4 +1,6 @@
 #!/bin/bash
+
+
 domain=$(sudo yunohost app setting flood domain)
 data_dir=$(sudo yunohost app setting flood data_dir)
 
@@ -12,7 +14,7 @@ sudo rm -f /etc/systemd/system/rtorrent.service
 
 # Remove the user
 sudo userdel -f flood
-sudo rm -rf /home/flood
+sudo rm -rf /var/www/flood
 
 # Remove the service
 sudo yunohost service remove flood

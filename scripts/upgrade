@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Exit on command errors and treat unset variables as an error
+set -eu
+
+# See comments in install script
+app=$YNH_APP_INSTANCE_NAME
+
 sudo service rtorrent stop
 sudo service flood stop
 
@@ -32,8 +38,15 @@ sudo make install
 sudo ldconfig
 
 # Update ruTorrent
-cd /home/flood
+cd /var/www/flood
 git pull
+chown -R flood:flood /var/www/flood
+
+# If app is public, add url to SSOWat conf as skipped_uris
+if [[ $is_public -eq 1 ]]; then
+  # See install script
+  ynh_app_setting_set "$app" unprotected_uris "/"
+fi
 
 sudo service rtorrent start
 sudo service flood start

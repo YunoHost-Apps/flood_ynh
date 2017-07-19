@@ -86,9 +86,9 @@ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 # Clone flood
-cd /home/flood
-git clone https://github.com/jfurrow/flood.git
-cp
+cd /var/www
+git clone https://github.com/jfurrow/flood.git 
+cp 
 
 # Launch flood on boot
 sudo cp ../sources/flood.service /etc/systemd/system/flood.service
@@ -112,3 +112,4 @@ sudo yunohost app setting flood path -v $path
 
 # Register the service on yunohost
 sudo yunohost service add rtorrent
+sudo yunohost service add flood
