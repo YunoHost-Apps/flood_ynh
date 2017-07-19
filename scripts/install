@@ -1,25 +1,42 @@
 #!/bin/bash
 
-# Retrieve arguments
-domain=$1
-path=$2
-data_dir=$3
-current_dir=${PWD}
-debian_version=$(lsb_release -c -s)
-
-# Source app helpers
+source _common.sh
 source /usr/share/yunohost/helpers
 
-# Check domain/path availability
-sudo yunohost app checkurl $domain$path -a flood
-if [[ ! $? -eq 0 ]]; then
-  echo "Error: domain/path not available"
-  exit 1
-fi
+# Retrieve arguments
+domain=$YNH_APP_ARG_DOMAIN
+path_url=$YNH_APP_ARG_PATH
+data_dir=$YNH_APP_ARG_DATA_DIR
+app=$YNH_APP_INSTANCE_NAME
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+# Normalize the url path syntax
+path_url=$(ynh_normalize_url_path $path_url)
+
+# Check web path availability
+ynh_webpath_available $domain $path_url
+# Register (book) web path
+ynh_webpath_register $app $domain $path_url
+
+final_path=/var/www/$app
+test ! -e "$final_path" || ynh_die "Ce dossier existe déjà."
+
+
+ynh_app_setting_set $app domain $domain
+ynh_app_setting_set $app path $path_url
+ynh_app_setting_set $app data_dir $data_dir
+
+# Find a free port
+port=$(ynh_find_port 45069)
+# Open this port
+sudo yunohost firewall allow --no-upnp TCP $port 2>&1
+ynh_app_setting_set $app port $port
 
 # Install de dependencies
 sudo apt-get update
-apt install build-essential subversion autoconf g++ gcc curl comerr-dev pkg-config cfv libtool libssl-dev libncurses5-dev ncurses-term libsigc++-2.0-dev libcppunit-dev libcurl3 libcurl4-openssl-dev
+ynh_install_app_dependencies build-essential subversion autoconf g++ gcc curl comerr-dev pkg-config cfv libtool libssl-dev libncurses5-dev ncurses-term libsigc++-2.0-dev libcppunit-dev libcurl3 libcurl4-openssl-dev
 cd /tmp
 wget http://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2015.6.1_all.deb
 sudo dpkg -i deb-multimedia-keyring_2015.6.1_all.deb
@@ -55,7 +72,7 @@ sudo make install
 sudo ldconfig
 
 # Configure nginx
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/flood.conf
+ynh_nginx_config
 
 # Create data dir
 sudo mkdir $data_dir
@@ -64,7 +81,7 @@ sudo mkdir $data_dir/downloads
 sudo mkdir $data_dir/.session
 
 # Create rtorrent user
-sudo useradd -p -m flood
+ynh_system_user_create $app
 
 # Add rtorrent config
 sudo sed -i "s@DATA_DIR@$data_dir@g" ../sources/rtorrent.rc
