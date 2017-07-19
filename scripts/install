@@ -7,6 +7,9 @@ data_dir=$3
 current_dir=${PWD}
 debian_version=$(lsb_release -c -s)
 
+# Source app helpers
+source /usr/share/yunohost/helpers
+
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a flood
 if [[ ! $? -eq 0 ]]; then
