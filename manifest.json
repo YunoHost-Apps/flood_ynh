@@ -19,8 +19,6 @@
     "multi_instance": false,
     "services": [
         "nginx",
-        "rtorrent",
-        "flood"
     ],
     "arguments": {
         "install" : [
@@ -51,7 +49,7 @@
                     "fr": "Choisissez un dossier pour sauver les telechargements"
                 },
                 "example": "/mnt/disk1/torrents",
-                "default": "/home/rtorrent"
+                "default": "/home/flood/download"
             }
         ]
     }
