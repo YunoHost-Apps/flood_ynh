@@ -35,11 +35,8 @@ sudo yunohost firewall allow --no-upnp TCP $port 2>&1
 ynh_app_setting_set $app port $port
 
 # Install de dependencies
-ynh_install_app_dependencies build-essential subversion autoconf g++ gcc curl comerr-dev pkg-config cfv libtool libssl-dev libncurses5-dev ncurses-term libsigc++-2.0-dev libcppunit-dev libcurl3 libcurl4-openssl-dev
-cd /tmp
-wget http://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2015.6.1_all.deb
-sudo dpkg -i deb-multimedia-keyring_2015.6.1_all.deb
-  
+ynh_install_app_dependencies build-essential subversion autoconf g++ gcc curl comerr-dev pkg-config cfv libtool libssl-dev libncurses5-dev ncurses-term libsigc++-2.0-dev libcppunit-dev libcurl3 libcurl4-openssl-dev mediainfo
+
 # Build xmlrpc
 cd /tmp
 sudo svn checkout http://svn.code.sf.net/p/xmlrpc-c/code/stable xmlrpc-c
