@@ -6,6 +6,7 @@
         "en": "Client torrent.",
         "fr": "Torrent client."
     },
+    "version": "0.1",
     "url": "https://github.com/TakerMc/flood_ynh",
     "license": "free",
     "maintainer": {
