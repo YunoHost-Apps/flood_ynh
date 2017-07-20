@@ -90,16 +90,6 @@ sudo chown -R flood:www-data /home/flood/.rtorrent.rc
 sudo chown -R flood:www-data $data_dir
 sudo chmod 755 $data_dir
 
-
-# Check port availability
-sudo yunohost app checkport 45069
-if [[ ! $? -eq 0 ]]; then
-  exit 1
-fi
-
-# Open port in firewall
-sudo yunohost firewall allow TCP 45069 > /dev/null 2>&1
-
 # Install nodejs for flood
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
@@ -107,7 +97,6 @@ sudo apt-get install -y nodejs
 # Clone flood
 cd /var/www
 git clone https://github.com/jfurrow/flood.git 
-cp 
 
 # Launch flood on boot
 sudo cp ../sources/flood.service /etc/systemd/system/flood.service
