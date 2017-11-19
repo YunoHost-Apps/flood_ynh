@@ -16,6 +16,9 @@ sudo rm -f /etc/systemd/system/rtorrent.service
 sudo userdel -f flood
 sudo rm -rf /var/www/flood
 
+# Close ports
+ALL_QUIET sudo yunohost firewall disallow TCP 45069
+
 # Remove the service
 sudo yunohost service remove flood
 sudo yunohost service remove rtorrent
