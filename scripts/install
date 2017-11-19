@@ -70,14 +70,14 @@ sudo ldconfig
 
 cd $current_dir
 
+# Create rtorrent user
+ynh_system_user_create $app
+
 # Create data dir
 sudo mkdir $data_dir
 sudo mkdir $data_dir/watch
 sudo mkdir $data_dir/downloads
 sudo mkdir $data_dir/.session
-
-# Create rtorrent user
-ynh_system_user_create $app
 
 # Add rtorrent config
 sudo sed -i "s@DATA_DIR@$data_dir@g" ../sources/rtorrent.rc
