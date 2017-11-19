@@ -37,7 +37,7 @@ sudo make install
 
 sudo ldconfig
 
-# Update ruTorrent
+# Update Flood
 cd /var/www/flood
 git pull
 chown -R flood:flood /var/www/flood

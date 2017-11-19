@@ -68,6 +68,7 @@ sudo make install
 sudo ldconfig
 
 # Configure nginx
+sed -i "s@YNH_EXAMPLE_PATH@$path_url@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 
 # Create data dir
