@@ -8,6 +8,7 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 data_dir=$YNH_APP_ARG_DATA_DIR
 app=$YNH_APP_INSTANCE_NAME
+current_dir=${PWD}
 
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -67,9 +68,7 @@ sudo make install
 
 sudo ldconfig
 
-# Configure nginx
-sed -i "s@YNH_EXAMPLE_PATH@$path_url@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+cd $current_dir
 
 # Create data dir
 sudo mkdir $data_dir
