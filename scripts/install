@@ -71,7 +71,7 @@ sudo ldconfig
 cd $current_dir
 
 # Create rtorrent user
-ynh_system_user_create $app
+ynh_system_user_create flood
 
 # Create data dir
 sudo mkdir $data_dir
@@ -96,6 +96,7 @@ cd /var/www
 git clone https://github.com/jfurrow/flood.git 
 
 # Launch flood on boot
+cd $current_dir
 sudo cp ../sources/flood.service /etc/systemd/system/flood.service
 systemctl daemon-reload
 systemctl enable flood.service
