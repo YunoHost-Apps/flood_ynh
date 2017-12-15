@@ -22,7 +22,7 @@ ynh_webpath_available $domain $path_url
 ynh_webpath_register $app $domain $path_url
 
 final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die "Ce dossier existe déjà."
+test ! -e "$final_path" || ynh_die "Ce dossier existe déjà."	
 
 
 ynh_app_setting_set $app domain $domain
@@ -36,35 +36,7 @@ sudo yunohost firewall allow --no-upnp TCP $port 2>&1
 ynh_app_setting_set $app port $port
 
 # Install de dependencies
-ynh_install_app_dependencies build-essential subversion autoconf g++ gcc curl comerr-dev pkg-config cfv libtool libssl-dev libncurses5-dev ncurses-term libsigc++-2.0-dev libcppunit-dev libcurl3 libcurl4-openssl-dev mediainfo
-
-# Build xmlrpc
-cd /tmp
-sudo svn checkout http://svn.code.sf.net/p/xmlrpc-c/code/stable xmlrpc-c
-cd xmlrpc-c/
-sudo ./configure
-sudo make
-sudo make install
-
-# Build libtorrent
-cd /tmp
-sudo git clone https://github.com/rakshasa/libtorrent.git
-cd libtorrent
-sudo git checkout 0.13.6
-sudo ./autogen.sh
-sudo ./configure
-sudo make
-sudo make install
-
-# Build rtorrent
-cd /tmp
-sudo git clone https://github.com/rakshasa/rtorrent.git
-cd rtorrent
-sudo git checkout 0.9.6
-sudo ./autogen.sh
-sudo ./configure --with-xmlrpc-c
-sudo make
-sudo make install
+ynh_install_app_dependencies build-essential subversion autoconf g++ gcc curl comerr-dev pkg-config cfv libtool libssl-dev libncurses5-dev ncurses-term libsigc++-2.0-dev libcppunit-dev libcurl3 libcurl4-openssl-dev mediainfo rtorrent
 
 sudo ldconfig
 
