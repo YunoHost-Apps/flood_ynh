@@ -46,10 +46,10 @@ cd $current_dir
 ynh_system_user_create flood
 
 # Create data dir
-sudo mkdir $data_dir
-sudo mkdir $data_dir/watch
-sudo mkdir $data_dir/downloads
-sudo mkdir $data_dir/.session
+sudo mkdir -p $data_dir
+sudo mkdir -p $data_dir/watch
+sudo mkdir -p $data_dir/downloads
+sudo mkdir -p $data_dir/.session
 
 # Add rtorrent config
 sudo sed -i "s@DATA_DIR@$data_dir@g" ../sources/rtorrent.rc
