@@ -76,7 +76,7 @@ systemctl enable rtorrent.service
 
 # Save config
 sudo yunohost app setting flood data_dir -v $data_dir
-sudo yunohost app setting flood path -v $path
+sudo yunohost app setting flood path_url -v $path_url
 
 # Register the service on yunohost
 sudo yunohost service add rtorrent
