@@ -82,6 +82,9 @@ sudo yunohost app setting flood path_url -v $path_url
 sudo yunohost service add rtorrent
 sudo yunohost service add flood
 
+# nginx config
+ynh_add_nginx_config
+
 # Start rtorrent and flood
 sudo service flood start
 sudo service rtorrent start
