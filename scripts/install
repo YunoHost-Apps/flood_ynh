@@ -32,7 +32,7 @@ ynh_app_setting_set $app data_dir $data_dir
 # Find a free port
 port=$(ynh_find_port 45069)
 # Open this port
-sudo yunohost firewall allow --no-upnp TCP $port 2>&1
+sudo yunohost firewall allow --no-upnp TCP $port >/dev/null 2>&1
 ynh_app_setting_set $app port $port
 
 # Install de dependencies
@@ -40,22 +40,18 @@ ynh_install_app_dependencies build-essential subversion autoconf g++ gcc curl co
 
 sudo ldconfig
 
-cd $current_dir
-
-# Create rtorrent user
+# Create flood user
 ynh_system_user_create flood
 
 # Create data dir
-sudo mkdir -p $data_dir
-sudo mkdir -p $data_dir/watch
-sudo mkdir -p $data_dir/downloads
-sudo mkdir -p $data_dir/.session
+sudo mkdir -p $data_dir/{.session,watch,torrent}
 
 # Add rtorrent config
-sudo sed -i "s@DATA_DIR@$data_dir@g" ../sources/rtorrent.rc
+ynh_replace_string "DATA_DIR" "$data_dir" ../sources/rtorrent.rc
 sudo cp ../sources/rtorrent.rc /home/flood/.rtorrent.rc
 sudo chown -R flood:www-data /home/flood/.rtorrent.rc
 
+# Permission for data_dir
 sudo chown -R flood:www-data $data_dir
 sudo chmod 755 $data_dir
 
@@ -78,12 +74,6 @@ sudo cp ../sources/rtorrent.service /etc/systemd/system/rtorrent.service
 systemctl daemon-reload
 systemctl enable rtorrent.service
 
-# Start rtorrent and flood
-sudo service flood start
-sudo service rtorrent start
-sudo yunohost app ssowatconf
-sudo service nginx reload
-
 # Save config
 sudo yunohost app setting flood data_dir -v $data_dir
 sudo yunohost app setting flood path -v $path
@@ -91,3 +81,9 @@ sudo yunohost app setting flood path -v $path
 # Register the service on yunohost
 sudo yunohost service add rtorrent
 sudo yunohost service add flood
+
+# Start rtorrent and flood
+sudo service flood start
+sudo service rtorrent start
+sudo yunohost app ssowatconf
+sudo service nginx reload
