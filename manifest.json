@@ -1,6 +1,6 @@
 {
     "name": "Flood",
-    "id": "floodynh",
+    "id": "flood",
     "packaging_format": 1,
     "description": {
         "en": "Client torrent.",
