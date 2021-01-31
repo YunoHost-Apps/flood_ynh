@@ -1,11 +1,14 @@
 [Unit]
-Description=Flood Web UI
+Description=rTorrent
 After=network.target
 
 [Service]
-WorkingDirectory=~
-ExecStart=/usr/bin/flood
 User=flood
+Type=forking
+KillMode=none
+ExecStart=/usr/bin/screen -d -m -fa -S rtorrent /usr/local/bin/rtorrent
+ExecStop=/usr/bin/killall -w -s 2 /usr/local/bin/rtorrent
+WorkingDirectory=%h
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target

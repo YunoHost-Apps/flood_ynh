@@ -62,6 +62,7 @@ sudo npm i -g flood
 
 # Launch flood on boot
 cd $current_dir
+ynh_replace_string "PATH" "$path_url" ../sources/flood.service
 sudo cp ../sources/flood.service /etc/systemd/system/flood.service
 systemctl daemon-reload
 systemctl enable flood.service
@@ -80,6 +81,7 @@ sudo yunohost service add rtorrent
 sudo yunohost service add flood
 
 # nginx config
+ynh_replace_string "PATH" "$path_url" ../conf/nginx.conf
 ynh_add_nginx_config
 
 # Start rtorrent and flood
