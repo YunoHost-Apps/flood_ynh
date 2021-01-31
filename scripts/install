@@ -54,21 +54,11 @@ sudo chown -R flood:www-data $data_dir
 sudo chmod 755 $data_dir
 
 # Install nodejs for flood
-curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
-# Clone flood
-git clone https://github.com/jfurrow/flood.git /var/www/flood
-
-# Config flood
-ynh_replace_string "PATH_URL" "$path_url" ../sources/config.js
-sudo cp ../sources/config.js /var/www/flood/config.js
-sudo chown -R flood:flood /var/www/flood/
-
-# Compiling assets for Flood
-cd /var/www/flood/
-npm install
-npm run build
+# Install flood
+sudo npm i -g flood
 
 # Launch flood on boot
 cd $current_dir
