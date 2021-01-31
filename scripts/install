@@ -58,8 +58,7 @@ curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 # Clone flood
-cd /var/www
-git clone https://github.com/jfurrow/flood.git 
+git clone https://github.com/jfurrow/flood.git /var/www
 
 # Config flood
 ynh_replace_string "PATH_URL" "$path_url" ../sources/config.js
