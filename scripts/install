@@ -63,10 +63,10 @@ git clone https://github.com/jfurrow/flood.git /var/www/flood
 # Config flood
 ynh_replace_string "PATH_URL" "$path_url" ../sources/config.js
 sudo cp ../sources/config.js /var/www/flood/config.js
-sudo chown -R flood:flood flood/
+sudo chown -R flood:flood /var/www/flood/
 
 # Compiling assets for Flood
-cd flood/
+cd /var/www/flood/
 npm install
 npm run build
 
