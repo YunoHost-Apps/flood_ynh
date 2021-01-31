@@ -35,7 +35,7 @@ sudo yunohost firewall allow --no-upnp TCP $port >/dev/null 2>&1
 ynh_app_setting_set $app port $port
 
 # Install de dependencies
-ynh_install_app_dependencies build-essential subversion autoconf g++ gcc curl comerr-dev pkg-config libtool libssl-dev libncurses5-dev ncurses-term libsigc++-2.0-dev libcppunit-dev libcurl4 libcurl4-openssl-dev mediainfo rtorrent
+ynh_install_app_dependencies build-essential subversion autoconf g++ gcc curl comerr-dev pkg-config libtool libssl-dev libncurses5-dev ncurses-term libsigc++-2.0-dev libcppunit-dev libcurl4 libcurl4-openssl-dev mediainfo rtorrent screen
 sudo ldconfig
 
 # Create flood user
