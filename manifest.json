@@ -6,8 +6,14 @@
         "en": "Client torrent.",
         "fr": "Torrent client."
     },
-    "version": "0.1",
-    "url": "https://github.com/TakerMc/flood_ynh",
+    "version": "4.7.0~ynh1",
+    "url": "https://github.com/jesec/flood",
+    "upstream": {
+        "license": "free",
+        "website": "https://github.com/jesec/flood",
+        "admindoc": "https://github.com/jesec/flood/wiki",
+        "code": "https://github.com/jesec/flood"
+    },
     "license": "free",
     "maintainer": {
         "name": "Taker",
@@ -15,7 +21,7 @@
         "url": "https://taker.fr"
     },
     "requirements": {
-        "yunohost": ">> 2.5.6"
+        "yunohost": ">= 4.3.0"
     },
     "multi_instance": false,
     "services": [
@@ -25,32 +31,18 @@
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
-                "ask": {
-                    "en": "Choose a domain name for flood",
-                    "fr": "Choisissez un nom de domaine pour flood"
-                },
-                "example": "example.com"
+                "type": "domain"
             },
             {
                 "name": "path",
                 "type": "path",
-                "ask": {
-                    "en": "Choose a path for flood",
-                    "fr": "Choisissez un chemin pour flood"
-                },
                 "example": "/flood",
                 "default": "/flood"
             },
             {
-                "name": "data_dir",
-                "type": "path",
-                "ask": {
-                    "en": "Choose a folder to store the downloads",
-                    "fr": "Choisissez un dossier pour sauver les telechargements"
-                },
-                "example": "/mnt/disk1/torrents",
-                "default": "/home/flood/download"
+                "name": "is_public",
+                "type": "boolean",
+                "default": false
             }
         ]
     }

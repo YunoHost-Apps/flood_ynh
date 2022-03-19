@@ -1,0 +1,7 @@
+SOURCE_URL=https://github.com/jesec/flood/releases/download/v4.7.0/flood-linux-x64.deb
+SOURCE_SUM=d528edc50e2a2a8d60aa1d37e2cdf0353c48f792b7ded4f150a0914931076d3f
+SOURCE_SUM_PRG=sha256sum
+SOURCE_FORMAT=deb
+SOURCE_IN_SUBDIR=false
+SOURCE_FILENAME=flood-linux.deb
+SOURCE_EXTRACT=false

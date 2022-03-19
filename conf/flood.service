@@ -1,0 +1,13 @@
+[Unit]
+Description=Flood rTorrent Web UI
+After=network.target
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+WorkingDirectory=__FINALPATH__/
+ExecStart=/usr/bin/flood --rundir="__FINALPATH__/" --baseuri="__PATH__" --port=__PORT__ --rthost="localhost" --rtport="__SCGI_PORT__" --allowedpath="__DATADIR__" --auth="none"
+
+[Install]
+WantedBy=multi-user.target
