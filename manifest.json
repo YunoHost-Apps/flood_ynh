@@ -9,12 +9,12 @@
     "version": "4.7.0~ynh1",
     "url": "https://github.com/jesec/flood",
     "upstream": {
-        "license": "free",
+        "license": "GPL-3.0-or-later",
         "website": "https://github.com/jesec/flood",
         "admindoc": "https://github.com/jesec/flood/wiki",
         "code": "https://github.com/jesec/flood"
     },
-    "license": "free",
+    "license": "GPL-3.0-or-later",
     "maintainer": {
         "name": "Taker",
         "email": "me@taker.fr",

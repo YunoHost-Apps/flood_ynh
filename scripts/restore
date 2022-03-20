@@ -107,7 +107,7 @@ systemctl enable $app-rtorrent.service --quiet
 ynh_script_progression --message="Integrating service in YunoHost..."
 
 yunohost service add $app
-yunohost service add $app-rtorrent
+yunohost service add $app-rtorrent --needs_exposed_ports $rt_port
 
 #=================================================
 # START SYSTEMD SERVICE
