@@ -17,6 +17,10 @@ Torrent client.
 
 
 
+## Captures d'écran
+
+![](./doc/screenshots/screenshot.png)
+
 ## Documentations et ressources
 
 * Site officiel de l'app : https://github.com/jesec/flood
