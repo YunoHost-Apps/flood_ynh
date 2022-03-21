@@ -6,7 +6,7 @@
 const CONFIG = {
   // The URL that Flood will be served from. For example, if you intend to
   // serve from http://example.com/flood, set this to '/flood'.
-  baseURI: 'DATA_DIR',
+  baseURI: '__PATH__',
   // Flood uses a local nedb database to keep track of users, torrents,
   // and activity. The database is regularly purged to remove outdated data.
   // This value dictates how old data is, in milliseconds, before being purged.
@@ -19,7 +19,7 @@ const CONFIG = {
   // To listen on all interfaces, change to `floodServerHost: '0.0.0.0'`
   floodServerHost: '127.0.0.1',
   // The port that Flood should listen for web connections on.
-  floodServerPort: 3001,
+  floodServerPort: __PORT__,
   // Used for development. See the "Local Development" section of README.md
   // for detail.
   floodServerProxy: 'http://127.0.0.1',
@@ -37,7 +37,7 @@ const CONFIG = {
   // These are defaults for most installs; check your .rtorrent.rc for changes.
   scgi: {
     host: 'localhost',
-    port: 5000,
+    port: __RT_PORT__,
     socket: false,
     socketPath: '/tmp/rtorrent.sock'
   },

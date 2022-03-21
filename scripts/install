@@ -1,91 +1,196 @@
 #!/bin/bash
 
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
-# Retrieve arguments
-domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH
-data_dir=$YNH_APP_ARG_DATA_DIR
-app=$YNH_APP_INSTANCE_NAME
-current_dir=${PWD}
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
 
+ynh_clean_setup () {
+	ynh_clean_check_starting
+}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-# Normalize the url path syntax
-path_url=$(ynh_normalize_url_path $path_url)
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
 
-# Check web path availability
-ynh_webpath_available $domain $path_url
-# Register (book) web path
-ynh_webpath_register $app $domain $path_url
+domain=$YNH_APP_ARG_DOMAIN
+path_url=$YNH_APP_ARG_PATH
+is_public=$YNH_APP_ARG_IS_PUBLIC
+
+app=$YNH_APP_INSTANCE_NAME
+
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
+ynh_script_progression --message="Validating installation parameters..."
 
 final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die "Ce dossier existe déjà."
+test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
-ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app path $path_url
-ynh_app_setting_set $app data_dir $data_dir
+# Register (book) web path
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
-# Find a free port
-port=$(ynh_find_port 45069)
-# Open this port
-sudo yunohost firewall allow --no-upnp TCP $port >/dev/null 2>&1
-ynh_app_setting_set $app port $port
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
+ynh_script_progression --message="Storing installation settings..."
 
-# Install de dependencies
-ynh_install_app_dependencies build-essential subversion autoconf g++ gcc curl comerr-dev pkg-config libtool libssl-dev libncurses5-dev ncurses-term libsigc++-2.0-dev libcppunit-dev libcurl4 libcurl4-openssl-dev mediainfo rtorrent screen
-sudo ldconfig
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=path --value=$path_url
 
-# Create flood user
-ynh_system_user_create flood
+#=================================================
+# STANDARD MODIFICATIONS
+#=================================================
+# FIND AND OPEN A PORT
+#=================================================
+ynh_script_progression --message="Finding an available port..."
 
-# Create data dir
-sudo mkdir -p $data_dir/{.session,watch,torrent}
+# Find an available port
+port=$(ynh_find_port --port=8095)
+ynh_app_setting_set --app=$app --key=port --value=$port
 
-# Add rtorrent config
-ynh_replace_string "DATA_DIR" "$data_dir" ../sources/rtorrent.rc
-sudo cp ../sources/rtorrent.rc /home/flood/.rtorrent.rc
-sudo chown -R flood:www-data /home/flood/
+# Find an available port
+scgi_port=$(ynh_find_port --port=8095)
+ynh_app_setting_set --app=$app --key=scgi_port --value=$scgi_port
 
-# Permission for data_dir
-sudo chown -R flood:www-data $data_dir
-sudo chmod 755 $data_dir
+# Find an available port
+rt_port=$(ynh_find_port --port=45069)
+ynh_app_setting_set --app=$app --key=rt_port --value=$rt_port
 
-# Install nodejs for flood
-curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
-sudo apt-get install -y nodejs
+# Open the port
+ynh_script_progression --message="Configuring firewall..."
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $rt_port
 
-# Install flood
-sudo npm i -g flood
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Installing dependencies..."
 
-# Launch flood on boot
-cd $current_dir
-ynh_replace_string "PATH" "$path_url" ../sources/flood.service
-sudo cp ../sources/flood.service /etc/systemd/system/flood.service
-systemctl daemon-reload
-systemctl enable flood.service
+ynh_install_app_dependencies $pkg_dependencies
 
-# Launch rtorrent on boot
-sudo cp ../sources/rtorrent.service /etc/systemd/system/rtorrent.service
-systemctl daemon-reload
-systemctl enable rtorrent.service
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..."
 
-# Save config
-sudo yunohost app setting flood data_dir -v $data_dir
-sudo yunohost app setting flood path_url -v $path_url
+# Create a system user
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
-# Register the service on yunohost
-sudo yunohost service add rtorrent
-sudo yunohost service add flood
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_script_progression --message="Setting up source files..."
 
-# nginx config
-ynh_replace_string "PATH" "$path_url" ../conf/nginx.conf
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source --dest_dir="$final_path" --source_id=$YNH_ARCH
+
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:$app "$final_path"
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Configuring NGINX web server..."
+
+# Create a dedicated NGINX config
 ynh_add_nginx_config
 
-# Start rtorrent and flood
-sudo service flood start
-sudo service rtorrent start
-sudo yunohost app ssowatconf
-sudo service nginx reload
+#=================================================
+# SPECIFIC SETUP
+#=================================================
+# INSTALL APP
+#=================================================
+ynh_script_progression --message="Installing app..."
+
+dpkg -i $final_path/flood-linux.deb
+ynh_secure_remove --file="$final_path/flood-linux.deb"
+
+#=================================================
+# CREATE DATA DIRECTORY
+#=================================================
+ynh_script_progression --message="Creating a data directory..."
+
+datadir=/home/yunohost.app/$app
+ynh_app_setting_set --app=$app --key=datadir --value=$datadir
+
+mkdir -p $datadir/{.session,watch,torrent}
+
+chmod 750 "$datadir"
+chmod -R o-rwx "$datadir"
+chown -R $app:www-data "$datadir"
+
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding a configuration file..."
+
+ynh_add_config --template="../conf/rtorrent.rc" --destination="$final_path/rtorrent.rc"
+
+chmod 400 "$final_path/rtorrent.rc"
+chown $app:$app "$final_path/rtorrent.rc"
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_script_progression --message="Configuring a systemd service..."
+
+# Create a dedicated systemd config
+ynh_add_systemd_config --service=$app --template="flood.service"
+ynh_add_systemd_config --service=$app-rtorrent --template="rtorrent.service"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
+
+yunohost service add $app
+yunohost service add $app-rtorrent --needs_exposed_ports $rt_port
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..."
+
+# Start a systemd service
+ynh_systemd_action --service_name=$app --action="start"
+ynh_systemd_action --service_name=$app-rtorrent --action="start"
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+ynh_script_progression --message="Configuring permissions..."
+
+# Make app public if necessary
+if [ $is_public -eq 1 ]
+then
+	# Everyone can access the app.
+	# The "main" permission is automatically created before the install script.
+	ynh_permission_update --permission="main" --add="visitors"
+fi
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading NGINX web server..."
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed"
