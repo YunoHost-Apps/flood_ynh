@@ -21,6 +21,10 @@ Client torrent.
 
 
 
+## Screenshots
+
+![](./doc/screenshots/screenshot.png)
+
 ## Documentation and resources
 
 * Official app website: https://github.com/jesec/flood
