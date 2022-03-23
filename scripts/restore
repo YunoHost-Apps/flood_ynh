@@ -95,6 +95,16 @@ ynh_script_progression --message="Reinstalling dependencies..."
 ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
+# REINSTALL FLOOD
+#=================================================
+ynh_script_progression --message="Reinstalling flood..."
+
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source --dest_dir="$final_path" --source_id=$YNH_ARCH
+dpkg -i $final_path/flood-linux.deb
+ynh_secure_remove --file="$final_path/flood-linux.deb"
+
+#=================================================
 # RESTORE SYSTEMD
 #=================================================
 ynh_script_progression --message="Restoring the systemd configuration..."
