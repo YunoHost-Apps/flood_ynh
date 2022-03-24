@@ -95,6 +95,25 @@ ynh_script_progression --message="Reinstalling dependencies..."
 ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
+# REINSTALL FLOOD
+#=================================================
+ynh_script_progression --message="Reinstalling flood..."
+
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source --dest_dir="$final_path" --source_id=$YNH_ARCH
+dpkg -i $final_path/flood-linux.deb
+ynh_secure_remove --file="$final_path/flood-linux.deb"
+
+#=================================================
+# OPEN A PORT
+#=================================================
+ynh_script_progression --message="Finding an available port..."
+
+# Open the port
+ynh_script_progression --message="Configuring firewall..."
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $rt_port
+
+#=================================================
 # RESTORE SYSTEMD
 #=================================================
 ynh_script_progression --message="Restoring the systemd configuration..."
@@ -117,7 +136,6 @@ yunohost service add $app-rtorrent --needs_exposed_ports $rt_port
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-# Start a systemd service
 ynh_systemd_action --service_name=$app --action="start"
 ynh_systemd_action --service_name=$app-rtorrent --action="start"
 
