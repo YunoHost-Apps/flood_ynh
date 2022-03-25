@@ -31,7 +31,6 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 datadir=$(ynh_app_setting_get --app=$app --key=datadir)
-port=$(ynh_app_setting_get --app=$app --key=port)
 scgi_port=$(ynh_app_setting_get --app=$app --key=scgi_port)
 rt_port=$(ynh_app_setting_get --app=$app --key=rt_port)
 
@@ -94,15 +93,10 @@ ynh_script_progression --message="Reinstalling dependencies..."
 # Define and install dependencies
 ynh_install_app_dependencies $pkg_dependencies
 
-#=================================================
-# REINSTALL FLOOD
-#=================================================
-ynh_script_progression --message="Reinstalling flood..."
-
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir="$final_path" --source_id=$YNH_ARCH
-dpkg -i $final_path/flood-linux.deb
-ynh_secure_remove --file="$final_path/flood-linux.deb"
+tmpdir="$(mktemp -d)"
+ynh_setup_source --dest_dir="$tmpdir" --source_id=$YNH_ARCH
+dpkg -i $tmpdir/flood-linux.deb
+ynh_secure_remove --file="$tmpdir"
 
 #=================================================
 # OPEN A PORT

@@ -73,7 +73,7 @@ then
 	ynh_script_progression --message="Upgrading source files..."
 
 	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$final_path" --source_id=$YNH_ARCH
+	mkdir -p "$final_path"
 fi
 
 chmod 750 "$final_path"
@@ -95,16 +95,13 @@ ynh_script_progression --message="Upgrading dependencies..."
 
 ynh_install_app_dependencies $pkg_dependencies
 
+tmpdir="$(mktemp -d)"
+ynh_setup_source --dest_dir="$tmpdir" --source_id=$YNH_ARCH
+dpkg -i $tmpdir/flood-linux.deb
+ynh_secure_remove --file="$tmpdir"
+
 #=================================================
 # SPECIFIC UPGRADE
-#=================================================
-# INSTALL APP
-#=================================================
-ynh_script_progression --message="Installing app..."
-
-dpkg -i $final_path/flood-linux.deb
-ynh_secure_remove --file="$final_path/flood-linux.deb"
-
 #=================================================
 # SETUP SYSTEMD
 #=================================================
