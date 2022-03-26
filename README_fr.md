@@ -13,9 +13,13 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Torrent client.
 
-**Version incluse :** 4.7.0~ynh1
+**Version incluse :** 4.7.0~ynh2
 
 
+
+## Captures d'écran
+
+![](./doc/screenshots/screenshot.png)
 
 ## Documentations et ressources
 

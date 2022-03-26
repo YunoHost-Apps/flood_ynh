@@ -31,7 +31,6 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 datadir=$(ynh_app_setting_get --app=$app --key=datadir)
-port=$(ynh_app_setting_get --app=$app --key=port)
 scgi_port=$(ynh_app_setting_get --app=$app --key=scgi_port)
 rt_port=$(ynh_app_setting_get --app=$app --key=rt_port)
 
@@ -94,6 +93,20 @@ ynh_script_progression --message="Reinstalling dependencies..."
 # Define and install dependencies
 ynh_install_app_dependencies $pkg_dependencies
 
+tmpdir="$(mktemp -d)"
+ynh_setup_source --dest_dir="$tmpdir" --source_id=$YNH_ARCH
+dpkg -i $tmpdir/flood-linux.deb
+ynh_secure_remove --file="$tmpdir"
+
+#=================================================
+# OPEN A PORT
+#=================================================
+ynh_script_progression --message="Finding an available port..."
+
+# Open the port
+ynh_script_progression --message="Configuring firewall..."
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $rt_port
+
 #=================================================
 # RESTORE SYSTEMD
 #=================================================
@@ -117,7 +130,6 @@ yunohost service add $app-rtorrent --needs_exposed_ports $rt_port
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-# Start a systemd service
 ynh_systemd_action --service_name=$app --action="start"
 ynh_systemd_action --service_name=$app-rtorrent --action="start"
 

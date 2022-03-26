@@ -17,9 +17,13 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Client torrent.
 
-**Shipped version:** 4.7.0~ynh1
+**Shipped version:** 4.7.0~ynh2
 
 
+
+## Screenshots
+
+![](./doc/screenshots/screenshot.png)
 
 ## Documentation and resources
 
