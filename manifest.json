@@ -3,8 +3,8 @@
     "id": "flood",
     "packaging_format": 1,
     "description": {
-        "en": "Client torrent.",
-        "fr": "Torrent client."
+        "en": "Monitoring service for various torrent clients",
+        "fr": "Service de surveillance pour divers clients torrent"
     },
     "version": "0.1",
     "url": "https://github.com/TakerMc/flood_ynh",
