@@ -3,8 +3,8 @@
     "id": "flood",
     "packaging_format": 1,
     "description": {
-        "en": "Client torrent.",
-        "fr": "Torrent client."
+        "en": "Torrent client",
+        "fr": "Client torrent"
     },
     "version": "4.7.0~ynh2",
     "url": "https://github.com/jesec/flood",
