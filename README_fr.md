@@ -17,7 +17,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Flood is a monitoring service for various torrent clients. It's a Node.js service that communicates with your favorite torrent client and serves a decent web UI for administration.
 
-**Version incluse :** 4.7.0~ynh2
+**Version incluse :** 4.7.0~ynh3
 
 ## Captures d'écran
 
@@ -25,7 +25,7 @@ Flood is a monitoring service for various torrent clients. It's a Node.js servic
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <https://github.com/jesec/flood>
+* Site officiel de l'app : <https://flood.js.org/>
 * Documentation officielle de l'admin : <https://github.com/jesec/flood/wiki>
 * Dépôt de code officiel de l'app : <https://github.com/jesec/flood>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_flood>
