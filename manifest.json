@@ -6,11 +6,11 @@
         "en": "Monitoring service for various torrent clients",
         "fr": "Service de surveillance pour divers clients torrent"
     },
-    "version": "4.7.0~ynh2",
-    "url": "https://github.com/jesec/flood",
+    "version": "4.7.0~ynh3",
+    "url": "https://flood.js.org/",
     "upstream": {
         "license": "GPL-3.0-or-later",
-        "website": "https://github.com/jesec/flood",
+        "website": "https://flood.js.org/",
         "admindoc": "https://github.com/jesec/flood/wiki",
         "code": "https://github.com/jesec/flood"
     },
@@ -21,7 +21,7 @@
         "url": "https://taker.fr"
     },
     "requirements": {
-        "yunohost": ">= 4.3.0"
+        "yunohost": ">= 11.0.9"
     },
     "multi_instance": false,
     "services": [
