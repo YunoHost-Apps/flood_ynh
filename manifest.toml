@@ -1,0 +1,65 @@
+packaging_format = 2
+
+id = "flood"
+name = "Flood"
+description.en = "Monitoring service for various torrent clients"
+description.fr = "Service de surveillance pour divers clients torrent"
+
+version = "4.7.0~ynh3"
+
+maintainers = ["Taker"]
+
+[upstream]
+license = "GPL-3.0-or-later"
+website = "https://flood.js.org/"
+admindoc = "https://github.com/jesec/flood/wiki"
+code = "https://github.com/jesec/flood"
+
+[integration]
+yunohost = ">= 11.2"
+architectures = "all"
+multi_instance = false
+ldap = false
+sso = false
+disk = "50M"
+ram.build = "50M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.path]
+    type = "path"
+    default = "/flood"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+[resources]
+        [resources.sources.main]
+        rename = "flood-linux.deb"
+        arm64.url = "https://github.com/jesec/flood/releases/download/v4.7.0/flood-linux-arm64.deb"
+        arm64.sha256 = "ed4626cf22580d2cd9932a870d14b2f93320f6768e5fa7d9bbbfa234ef7c4e6a"
+        amd64.url = "https://github.com/jesec/flood/releases/download/v4.7.0/flood-linux-x64.deb"
+        amd64.sha256 = "d528edc50e2a2a8d60aa1d37e2cdf0353c48f792b7ded4f150a0914931076d3f"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.data_dir]
+    subdirs = [".session", "watch", "torrent"]
+
+    [resources.ports]
+    main.default = 8095
+    scgi.default = 8096
+    rt.default = 45069
+    rt.exposed = "TCP"
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.apt]
+    packages = "rtorrent, screen"

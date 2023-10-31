@@ -23,19 +23,19 @@ throttle.max_uploads.set = 15
 
 # Default directory to save the downloaded torrents.
 #
-directory.default.set = __DATADIR__/downloads
+directory.default.set = __DATA_DIR__/downloads
 
 # Default session directory. Make sure you don't run multiple instance
 # of rtorrent using the same session directory. Perhaps using a
 # relative path?
 #
-session.path.set = __DATADIR__/.session
+session.path.set = __DATA_DIR__/.session
 
 # Watch a directory for new torrents, and stop those that have been
 # deleted.
 #
-schedule2 = watch_directory,1,1,"load_start=__DATADIR__/watch/*.torrent"
-schedule2 = untied_directory,5,5,"stop_untied=__DATADIR__/watch/*.torrent"
+schedule2 = watch_directory,1,1,"load_start=__DATA_DIR__/watch/*.torrent"
+schedule2 = untied_directory,5,5,"stop_untied=__DATA_DIR__/watch/*.torrent"
 
 # Close torrents when diskspace is low.
 #
@@ -54,7 +54,7 @@ schedule2 = untied_directory,5,5,"stop_untied=__DATADIR__/watch/*.torrent"
 
 # Port range to use for listening.
 #
-network.port_range.set = __RT_PORT__-__RT_PORT__
+network.port_range.set = __PORT_RT__-__PORT_RT__
 
 # Start opening ports at a random position within the port range.
 #
@@ -107,4 +107,4 @@ protocol.pex.set = no
 # Use a IP socket with scgi_port, or a Unix socket with scgi_local.
 # schedule can be used to set permissions on the unix socket.
 #
-scgi_port = 127.0.0.1:__SCGI_PORT__
+scgi_port = 127.0.0.1:__PORT_SCGI__
