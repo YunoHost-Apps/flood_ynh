@@ -54,7 +54,7 @@ schedule2 = untied_directory,5,5,"stop_untied=__DATA_DIR__/watch/*.torrent"
 
 # Port range to use for listening.
 #
-network.port_range.set = __RT_PORT__-__RT_PORT__
+network.port_range.set = __PORT_RT__-__PORT_RT__
 
 # Start opening ports at a random position within the port range.
 #
@@ -107,4 +107,4 @@ protocol.pex.set = no
 # Use a IP socket with scgi_port, or a Unix socket with scgi_local.
 # schedule can be used to set permissions on the unix socket.
 #
-scgi_port = 127.0.0.1:__SCGI_PORT__
+scgi_port = 127.0.0.1:__PORT_SCGI__

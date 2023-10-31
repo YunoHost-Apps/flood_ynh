@@ -7,7 +7,7 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/
-ExecStart=/usr/bin/flood --rundir="__INSTALL_DIR__/" --baseuri="__PATH__" --port=__PORT__ --rthost="localhost" --rtport="__SCGI_PORT__" --allowedpath="__DATA_DIR__" --auth="none"
+ExecStart=/usr/bin/flood --rundir="__INSTALL_DIR__/" --baseuri="__PATH__" --port=__PORT__ --rthost="localhost" --rtport="__PORT_SCGI__" --allowedpath="__DATA_DIR__" --auth="none"
 
 [Install]
 WantedBy=multi-user.target
