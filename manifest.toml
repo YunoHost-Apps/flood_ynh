@@ -46,7 +46,6 @@ ram.runtime = "50M"
         amd64.url = "https://github.com/jesec/flood/releases/download/v4.7.0/flood-linux-x64.deb"
         amd64.sha256 = "d528edc50e2a2a8d60aa1d37e2cdf0353c48f792b7ded4f150a0914931076d3f"
 
-
     [resources.system_user]
 
     [resources.install_dir]
