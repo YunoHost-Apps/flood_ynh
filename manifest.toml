@@ -39,7 +39,6 @@ ram.runtime = "50M"
 
 [resources]
         [resources.sources.main]
-        format = "deb"
         rename = "flood-linux.deb"
         arm64.url = "https://github.com/jesec/flood/releases/download/v4.7.0/flood-linux-arm64.deb"
         arm64.sha256 = "ed4626cf22580d2cd9932a870d14b2f93320f6768e5fa7d9bbbfa234ef7c4e6a"
