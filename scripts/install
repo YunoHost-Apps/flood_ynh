@@ -65,7 +65,7 @@ ynh_add_systemd_config --service=$app-rtorrent --template="rtorrent.service"
 ynh_script_progression --message="Integrating service in YunoHost..."
 
 yunohost service add $app
-yunohost service add $app-rtorrent --needs_exposed_ports $rt_port
+yunohost service add $app-rtorrent --needs_exposed_ports $port_rt
 
 #=================================================
 # START SYSTEMD SERVICE
