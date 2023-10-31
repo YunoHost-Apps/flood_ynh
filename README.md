@@ -5,7 +5,8 @@ It shall NOT be edited by hand.
 
 # Flood for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/flood.svg)](https://dash.yunohost.org/appci/app/flood) ![Working status](https://ci-apps.yunohost.org/ci/badges/flood.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/flood.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/flood.svg)](https://dash.yunohost.org/appci/app/flood) ![Working status](https://ci-apps.yunohost.org/ci/badges/flood.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/flood.maintain.svg)
+
 [![Install Flood with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=flood)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -28,7 +29,7 @@ Flood is a monitoring service for various torrent clients. It's a Node.js servic
 * Official app website: <https://flood.js.org/>
 * Official admin documentation: <https://github.com/jesec/flood/wiki>
 * Upstream app code repository: <https://github.com/jesec/flood>
-* YunoHost documentation for this app: <https://yunohost.org/app_flood>
+* YunoHost Store: <https://apps.yunohost.org/app/flood>
 * Report a bug: <https://github.com/YunoHost-Apps/flood_ynh/issues>
 
 ## Developer info
