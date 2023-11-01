@@ -37,7 +37,7 @@ const CONFIG = {
   // These are defaults for most installs; check your .rtorrent.rc for changes.
   scgi: {
     host: 'localhost',
-    port: __RT_PORT__,
+    port: __PORT_RT__,
     socket: false,
     socketPath: '/tmp/rtorrent.sock'
   },

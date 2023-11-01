@@ -7,8 +7,8 @@ Type=forking
 KillMode=none
 User=__APP__
 Group=__APP__
-WorkingDirectory=__FINALPATH__/
-ExecStart=/usr/bin/screen -d -m -fa -S rtorrent /usr/bin/rtorrent -o import=__FINALPATH__/rtorrent.rc
+WorkingDirectory=__INSTALL_DIR__/
+ExecStart=/usr/bin/screen -d -m -fa -S rtorrent /usr/bin/rtorrent -o import=__INSTALL_DIR__/rtorrent.rc
 ExecStop=/usr/bin/killall -w -s 2 /usr/bin/rtorrent
 Restart=on-failure
 RestartSec=3
