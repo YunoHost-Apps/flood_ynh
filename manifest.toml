@@ -17,7 +17,7 @@ code = "https://github.com/jesec/flood"
 
 [integration]
 yunohost = ">= 11.2"
-architectures = "all"
+architectures = [ "amd64", "arm64" ]
 multi_instance = false
 ldap = false
 sso = false
@@ -44,6 +44,10 @@ ram.runtime = "50M"
         arm64.sha256 = "ed4626cf22580d2cd9932a870d14b2f93320f6768e5fa7d9bbbfa234ef7c4e6a"
         amd64.url = "https://github.com/jesec/flood/releases/download/v4.7.0/flood-linux-x64.deb"
         amd64.sha256 = "d528edc50e2a2a8d60aa1d37e2cdf0353c48f792b7ded4f150a0914931076d3f"
+
+        autoupdate.strategy = "latest_github_release"
+        autoupdate.asset.arm64 = "flood-linux-arm64.deb"
+        autoupdate.asset.amd64 = "flood-linux-x64.deb"
 
     [resources.system_user]
 
