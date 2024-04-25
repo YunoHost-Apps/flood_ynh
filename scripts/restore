@@ -37,7 +37,7 @@ chown -R $app:www-data "$data_dir"
 ynh_script_progression --message="Reinstalling dependencies..."
 
 tmpdir="$(mktemp -d)"
-ynh_setup_source --dest_dir="$tmpdir"
+ynh_setup_source --dest_dir="$tmpdir" --full_replace=1
 dpkg -i $tmpdir/flood-linux.deb
 ynh_secure_remove --file="$tmpdir"
 
