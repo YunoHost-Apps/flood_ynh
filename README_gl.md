@@ -5,7 +5,7 @@ NON debe editarse manualmente.
 
 # Flood para YunoHost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/flood.svg)](https://dash.yunohost.org/appci/app/flood) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/flood.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/flood.maintain.svg)
+[![Nivel de integración](https://dash.yunohost.org/integration/flood.svg)](https://ci-apps.yunohost.org/ci/apps/flood/) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/flood.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/flood.maintain.svg)
 
 [![Instalar Flood con YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=flood)
 
