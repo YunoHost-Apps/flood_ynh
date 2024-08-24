@@ -18,7 +18,7 @@
 
 Flood is a monitoring service for rTorrent. It's a Node.js service that communicates with your favorite torrent client and serves a decent web UI for administration.
 
-**分发版本：** 4.8.2~ynh1
+**分发版本：** 4.8.2~ynh2
 
 ## 截图
 
