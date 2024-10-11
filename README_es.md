@@ -34,7 +34,7 @@ Flood is a monitoring service for rTorrent. It's a Node.js service that communic
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/flood_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/flood_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 
