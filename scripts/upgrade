@@ -14,25 +14,12 @@ ynh_systemctl --service=$app-rtorrent --action="stop"
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
+ynh_script_progression "Upgrading source files..."
 
-# FIXME: this is still supported but the recommendation is now to *always* re-setup the app sources wether or not the upstream sources changed
-if ynh_app_upstream_version_changed
-then
-	ynh_script_progression "Upgrading source files..."
+mkdir -p "$install_dir"
 
-	# Download, check integrity, uncompress and patch the source from app.src
-	mkdir -p "$install_dir"
-fi
-
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
-#=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression "Upgrading NGINX web server configuration..."
-
-# Create a dedicated NGINX config
-ynh_config_add_nginx
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 
 #=================================================
 # UPGRADE DEPENDENCIES
@@ -49,14 +36,10 @@ ynh_safe_rm "$tmpdir"
 #=================================================
 ynh_script_progression "Upgrading systemd configuration..."
 
-# Create a dedicated systemd config
+ynh_config_add_nginx
+
 ynh_config_add_systemd  --template="flood.service"
 ynh_config_add_systemd --service=$app-rtorrent --template="rtorrent.service"
-
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression "Integrating service in YunoHost..."
 
 yunohost service add $app
 yunohost service add $app-rtorrent --needs_exposed_ports $port_rt
@@ -66,7 +49,6 @@ yunohost service add $app-rtorrent --needs_exposed_ports $port_rt
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-# Start a systemd service
 ynh_systemctl --service=$app --action="start"
 ynh_systemctl --service=$app-rtorrent --action="start"
 
