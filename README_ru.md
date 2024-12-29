@@ -5,7 +5,9 @@
 
 # Flood для YunoHost
 
-[![Уровень интеграции](https://dash.yunohost.org/integration/flood.svg)](https://ci-apps.yunohost.org/ci/apps/flood/) ![Состояние работы](https://ci-apps.yunohost.org/ci/badges/flood.status.svg) ![Состояние сопровождения](https://ci-apps.yunohost.org/ci/badges/flood.maintain.svg)
+[![Уровень интеграции](https://apps.yunohost.org/badge/integration/flood)](https://ci-apps.yunohost.org/ci/apps/flood/)
+![Состояние работы](https://apps.yunohost.org/badge/state/flood)
+![Состояние сопровождения](https://apps.yunohost.org/badge/maintained/flood)
 
 [![Установите Flood с YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=flood)
 
