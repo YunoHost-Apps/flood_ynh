@@ -5,7 +5,9 @@ Ini TIDAK boleh diedit dengan tangan.
 
 # Flood untuk YunoHost
 
-[![Tingkat integrasi](https://dash.yunohost.org/integration/flood.svg)](https://ci-apps.yunohost.org/ci/apps/flood/) ![Status kerja](https://ci-apps.yunohost.org/ci/badges/flood.status.svg) ![Status pemeliharaan](https://ci-apps.yunohost.org/ci/badges/flood.maintain.svg)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/flood)](https://ci-apps.yunohost.org/ci/apps/flood/)
+![Status kerja](https://apps.yunohost.org/badge/state/flood)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/flood)
 
 [![Pasang Flood dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=flood)
 
