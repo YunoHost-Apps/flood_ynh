@@ -1,49 +1,34 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing dependencies..."
+ynh_script_progression "Installing dependencies..."
 
 tmpdir="$(mktemp -d)"
 ynh_setup_source --dest_dir="$tmpdir"
 dpkg -i $tmpdir/flood-linux.deb
-ynh_secure_remove --file="$tmpdir"
+ynh_safe_rm "$tmpdir"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up source files..."
+ynh_script_progression "Setting up source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
 mkdir -p "$install_dir"
 
 chmod -R o-rwx "$install_dir"
 chown -R $app:$app "$install_dir"
 
 #=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Configuring NGINX web server..."
-
-# Create a dedicated NGINX config
-ynh_add_nginx_config
-
-#=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..."
+ynh_script_progression "Adding $app's configuration..."
 
-ynh_add_config --template="rtorrent.rc" --destination="$install_dir/rtorrent.rc"
+ynh_config_add --template="rtorrent.rc" --destination="$install_dir/rtorrent.rc"
 
 chmod 400 "$install_dir/rtorrent.rc"
 chown $app:$app "$install_dir/rtorrent.rc"
@@ -51,18 +36,13 @@ chown $app:$app "$install_dir/rtorrent.rc"
 #=================================================
 # SETUP SYSTEMD
 #=================================================
-ynh_script_progression --message="Configuring a systemd service..."
+ynh_script_progression "Configuring $app's systemd service..."
+
+ynh_config_add_nginx
 
 # Create a dedicated systemd config
-ynh_add_systemd_config --service=$app --template="flood.service"
-ynh_add_systemd_config --service=$app-rtorrent --template="rtorrent.service"
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
+ynh_config_add_systemd  --template="flood.service"
+ynh_config_add_systemd --service=$app-rtorrent --template="rtorrent.service"
 
 yunohost service add $app
 yunohost service add $app-rtorrent --needs_exposed_ports $port_rt
@@ -70,14 +50,13 @@ yunohost service add $app-rtorrent --needs_exposed_ports $port_rt
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..."
+ynh_script_progression "Starting $app's systemd service..."
 
-# Start a systemd service
-ynh_systemd_action --service_name=$app --action="start"
-ynh_systemd_action --service_name=$app-rtorrent --action="start"
+ynh_systemctl --service=$app --action="start"
+ynh_systemctl --service=$app-rtorrent --action="start"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed"
+ynh_script_progression "Installation of $app completed"
