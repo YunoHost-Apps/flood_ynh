@@ -5,7 +5,9 @@ It shall NOT be edited by hand.
 
 # Flood for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/flood.svg)](https://ci-apps.yunohost.org/ci/apps/flood/) ![Working status](https://ci-apps.yunohost.org/ci/badges/flood.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/flood.maintain.svg)
+[![Integration level](https://apps.yunohost.org/badge/integration/flood)](https://ci-apps.yunohost.org/ci/apps/flood/)
+![Working status](https://apps.yunohost.org/badge/state/flood)
+![Maintenance status](https://apps.yunohost.org/badge/maintained/flood)
 
 [![Install Flood with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=flood)
 
@@ -18,7 +20,7 @@ It shall NOT be edited by hand.
 
 Flood is a monitoring service for rTorrent. It's a Node.js service that communicates with your favorite torrent client and serves a decent web UI for administration.
 
-**Shipped version:** 4.8.2~ynh3
+**Shipped version:** 4.9.3~ynh1
 
 ## Screenshots
 
