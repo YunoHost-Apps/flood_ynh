@@ -18,14 +18,9 @@ ynh_script_progression "Updating NGINX web server configuration..."
 ynh_config_change_url_nginx
 
 #=================================================
-# SPECIFIC MODIFICATIONS
-#=================================================
 # SETUP SYSTEMD
 #=================================================
 ynh_script_progression "Upgrading systemd configuration..."
-
-path=$new_path
-domain=$new_domain
 
 # Create a dedicated systemd config
 ynh_config_add_systemd  --template="flood.service"
