@@ -11,9 +11,6 @@ ynh_script_progression "Restoring the app main directory..."
 
 ynh_restore "$install_dir"
 
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
-
 #=================================================
 # RESTORE THE DATA DIRECTORY
 #=================================================
@@ -54,11 +51,6 @@ ynh_script_progression "Starting $app's systemd service..."
 
 ynh_systemctl --service=$app --action="start"
 ynh_systemctl --service=$app-rtorrent --action="start"
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression "Reloading NGINX web server..."
 
 ynh_systemctl --service=nginx --action=reload
 
