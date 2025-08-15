@@ -25,36 +25,23 @@ chmod -R o-rwx "$install_dir"
 chown -R $app:$app "$install_dir"
 
 #=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression "Configuring NGINX web server..."
-
-# Create a dedicated NGINX config
-ynh_config_add_nginx
-
-#=================================================
 # ADD A CONFIGURATION
 #=================================================
 ynh_script_progression "Adding $app's configuration..."
 
 ynh_config_add --template="rtorrent.rc" --destination="$install_dir/rtorrent.rc"
 
-chmod 400 "$install_dir/rtorrent.rc"
-chown $app:$app "$install_dir/rtorrent.rc"
+#=================================================
+# SYSTEM CONFIGURATION
+#=================================================
+ynh_script_progression "Adding system configurations related to $app..."
 
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression "Configuring $app's systemd service..."
+# Create a dedicated NGINX config
+ynh_config_add_nginx
 
 # Create a dedicated systemd config
 ynh_config_add_systemd  --template="flood.service"
 ynh_config_add_systemd --service=$app-rtorrent --template="rtorrent.service"
-
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression "Integrating service in YunoHost..."
 
 yunohost service add $app
 yunohost service add $app-rtorrent --needs_exposed_ports $port_rt

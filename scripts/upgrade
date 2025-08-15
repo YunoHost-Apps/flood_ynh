@@ -23,14 +23,6 @@ chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
 #=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression "Upgrading NGINX web server configuration..."
-
-# Create a dedicated NGINX config
-ynh_config_add_nginx
-
-#=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
 ynh_script_progression "Upgrading dependencies..."
@@ -41,18 +33,16 @@ dpkg -i $tmpdir/flood-linux.deb
 ynh_safe_rm "$tmpdir"
 
 #=================================================
-# SETUP SYSTEMD
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression "Upgrading systemd configuration..."
+ynh_script_progression "Upgrading system configurations related to $app..."
+
+# Create a dedicated NGINX config
+ynh_config_add_nginx
 
 # Create a dedicated systemd config
 ynh_config_add_systemd  --template="flood.service"
 ynh_config_add_systemd --service=$app-rtorrent --template="rtorrent.service"
-
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression "Integrating service in YunoHost..."
 
 yunohost service add $app
 yunohost service add $app-rtorrent --needs_exposed_ports $port_rt
