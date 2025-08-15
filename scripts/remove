@@ -18,7 +18,7 @@ fi
 
 # Remove the dedicated systemd config
 ynh_config_remove_systemd
-ynh_config_remove_systemd"$app-rtorrent"
+ynh_config_remove_systemd "$app-rtorrent"
 
 # Remove the dedicated NGINX config
 ynh_config_remove_nginx
