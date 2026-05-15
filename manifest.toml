@@ -7,7 +7,7 @@ name = "Flood"
 description.en = "Monitoring service for various torrent clients"
 description.fr = "Service de surveillance pour divers clients torrent"
 
-version = "4.13.10~ynh1"
+version = "4.14.1~ynh1"
 
 maintainers = ["Taker"]
 
@@ -45,10 +45,10 @@ ram.runtime = "100M"
 [resources]
         [resources.sources.main]
         rename = "flood-linux.deb"
-        arm64.url = "https://github.com/jesec/flood/releases/download/v4.13.10/flood-linux-arm64.deb"
-        arm64.sha256 = "9eb5719d70eef5a7b942f112552d0a24cb87b69a4af9cff8e7505c2751e8f594"
-        amd64.url = "https://github.com/jesec/flood/releases/download/v4.13.10/flood-linux-x64.deb"
-        amd64.sha256 = "d98e9650364fe84c8e5adc97023c1daeaa2a9af2583e694391e72ed29fd4d273"
+        arm64.url = "https://github.com/jesec/flood/releases/download/v4.14.1/flood-linux-arm64.deb"
+        arm64.sha256 = "8622abd691e005585b5e2d56ac24468d6cb9c1c240dc99755c3218039e2c8224"
+        amd64.url = "https://github.com/jesec/flood/releases/download/v4.14.1/flood-linux-x64.deb"
+        amd64.sha256 = "64d2d083eda6c0541a6be52154c5c0b58eee2c2f675ab9875f5090dd141172b2"
 
         autoupdate.strategy = "latest_github_release"
         autoupdate.asset.arm64 = "flood-linux-arm64.deb"
